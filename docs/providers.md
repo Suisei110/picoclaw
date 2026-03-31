@@ -67,6 +67,7 @@ This design also enables **multi-agent support** with flexible provider selectio
 | **LongCat**         | `longcat/`        | `https://api.longcat.chat/openai`                   | OpenAI    | [Get Key](https://longcat.chat/platform)                         |
 | **ModelScope (魔搭)**| `modelscope/`    | `https://api-inference.modelscope.cn/v1`            | OpenAI    | [Get Token](https://modelscope.cn/my/tokens)                     |
 | **Xiaomi MiMo**     | `mimo/`           | `https://api.xiaomimimo.com/v1`                     | OpenAI    | [Get Key](https://platform.xiaomimimo.com)                       |
+| **Ollama Cloud**    | `ollama-cloud/`   | `https://ollama.com/api`                            | OpenAI    | [Get Key](https://ollama.com/settings/keys)                      |
 | **Azure OpenAI**    | `azure/`          | `https://{resource}.openai.azure.com`               | Azure     | [Get Key](https://portal.azure.com)                              |
 | **Antigravity**     | `antigravity/`    | Google Cloud                                        | Custom    | OAuth only                                                       |
 | **GitHub Copilot**  | `github-copilot/` | `localhost:4321`                                    | gRPC      | -                                                                |
@@ -225,6 +226,26 @@ For direct Anthropic API access or custom endpoints that only support Anthropic'
   "model": "ollama/llama3"
 }
 ```
+
+**Ollama Cloud**
+
+```json
+{
+  "model_name": "ollama-cloud-gpt",
+  "model": "ollama-cloud/gpt-oss:120b-cloud"
+}
+```
+
+Add your Ollama API key to `.security.yml`:
+
+```yaml
+model_list:
+  ollama-cloud-gpt:
+    api_keys:
+      - "your-ollama-api-key"
+```
+
+Get your API key from [ollama.com/settings/keys](https://ollama.com/settings/keys).
 
 **Custom Proxy/API**
 

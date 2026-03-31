@@ -176,6 +176,24 @@ func CreateProviderFromConfig(cfg *config.ModelConfig) (LLMProvider, string, err
 			cfg.ExtraBody,
 		), modelID, nil
 
+	case "ollama-cloud":
+		// Ollama Cloud requires API key authentication
+		if cfg.APIKey() == "" {
+			return nil, "", fmt.Errorf("api_key is required for ollama-cloud protocol. Add your Ollama API key to .security.yml (see docs/security_configuration.md)")
+		}
+		apiBase := cfg.APIBase
+		if apiBase == "" {
+			apiBase = getDefaultAPIBase(protocol)
+		}
+		return NewHTTPProviderWithMaxTokensFieldAndRequestTimeout(
+			cfg.APIKey(),
+			apiBase,
+			cfg.Proxy,
+			cfg.MaxTokensField,
+			cfg.RequestTimeout,
+			cfg.ExtraBody,
+		), modelID, nil
+
 	case "minimax":
 		// Minimax requires reasoning_split: true in the request body
 		if cfg.APIKey() == "" && cfg.APIBase == "" {
@@ -351,6 +369,8 @@ func getDefaultAPIBase(protocol string) string {
 		return "https://api-inference.modelscope.cn/v1"
 	case "mimo":
 		return "https://api.xiaomimimo.com/v1"
+	case "ollama-cloud":
+		return "https://ollama.com/api"
 	default:
 		return ""
 	}

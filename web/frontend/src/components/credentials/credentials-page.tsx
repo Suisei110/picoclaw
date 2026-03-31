@@ -8,6 +8,7 @@ import { AnthropicCredentialCard } from "./anthropic-credential-card"
 import { AntigravityCredentialCard } from "./antigravity-credential-card"
 import { DeviceCodeSheet } from "./device-code-sheet"
 import { LogoutConfirmDialog } from "./logout-confirm-dialog"
+import { OllamaCloudCredentialCard } from "./ollama-cloud-credential-card"
 import { OpenAICredentialCard } from "./openai-credential-card"
 
 export function CredentialsPage() {
@@ -20,9 +21,11 @@ export function CredentialsPage() {
     flowHint,
     openAIToken,
     anthropicToken,
+    ollamaCloudToken,
     openaiStatus,
     anthropicStatus,
     antigravityStatus,
+    ollamaCloudStatus,
     logoutDialogOpen,
     logoutConfirmProvider,
     logoutProviderLabel,
@@ -30,6 +33,7 @@ export function CredentialsPage() {
     deviceFlow,
     setOpenAIToken,
     setAnthropicToken,
+    setOllamaCloudToken,
     startBrowserOAuth,
     startOpenAIDeviceCode,
     stopLoading,
@@ -103,6 +107,18 @@ export function CredentialsPage() {
                 void startBrowserOAuth("google-antigravity")
               }
               onAskLogout={() => askLogout("google-antigravity")}
+            />
+
+            <OllamaCloudCredentialCard
+              status={ollamaCloudStatus}
+              activeAction={activeAction}
+              token={ollamaCloudToken}
+              onTokenChange={setOllamaCloudToken}
+              onStopLoading={stopLoading}
+              onSaveToken={() =>
+                void saveToken("ollama-cloud", ollamaCloudToken.trim())
+              }
+              onAskLogout={() => askLogout("ollama-cloud")}
             />
           </div>
         )}

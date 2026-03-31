@@ -178,26 +178,26 @@ func CreateProviderFromConfig(cfg *config.ModelConfig) (LLMProvider, string, err
 		), modelID, nil
 
 	case "ollama-cloud":
-		// Ollama Cloud - API key can be provided via:
+		// Ollama Cloud provider using native Ollama API (not OpenAI-compatible)
+		// API key can be provided via:
 		// 1. Environment variable: OLLAMA_API_KEY
-		// 2. Prompt at runtime (GUI/TUI)
+		// 2. Auth store (via GUI/TUI credential management)
 		// 3. .security.yml (if configured)
 		apiKey := cfg.APIKey()
 		if apiKey == "" {
 			apiKey = os.Getenv("OLLAMA_API_KEY")
 		}
+		// Try loading from auth store if still empty
+		if apiKey == "" {
+			if cred, err := getCredential("ollama-cloud"); err == nil && cred != nil {
+				apiKey = cred.AccessToken
+			}
+		}
 		apiBase := cfg.APIBase
 		if apiBase == "" {
 			apiBase = getDefaultAPIBase(protocol)
 		}
-		return NewHTTPProviderWithMaxTokensFieldAndRequestTimeout(
-			apiKey,
-			apiBase,
-			cfg.Proxy,
-			cfg.MaxTokensField,
-			cfg.RequestTimeout,
-			cfg.ExtraBody,
-		), modelID, nil
+		return NewOllamaCloudProvider(apiKey, apiBase, cfg.Proxy), modelID, nil
 
 	case "minimax":
 		// Minimax requires reasoning_split: true in the request body

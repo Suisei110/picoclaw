@@ -21,6 +21,7 @@ const (
 	oauthProviderOpenAI            = "openai"
 	oauthProviderAnthropic         = "anthropic"
 	oauthProviderGoogleAntigravity = "google-antigravity"
+	oauthProviderOllamaCloud       = "ollama-cloud"
 
 	oauthMethodBrowser    = "browser"
 	oauthMethodDeviceCode = "device_code"
@@ -42,18 +43,21 @@ var oauthProviderOrder = []string{
 	oauthProviderOpenAI,
 	oauthProviderAnthropic,
 	oauthProviderGoogleAntigravity,
+	oauthProviderOllamaCloud,
 }
 
 var oauthProviderMethods = map[string][]string{
 	oauthProviderOpenAI:            {oauthMethodBrowser, oauthMethodDeviceCode, oauthMethodToken},
 	oauthProviderAnthropic:         {oauthMethodToken},
 	oauthProviderGoogleAntigravity: {oauthMethodBrowser},
+	oauthProviderOllamaCloud:       {oauthMethodToken},
 }
 
 var oauthProviderLabels = map[string]string{
 	oauthProviderOpenAI:            "OpenAI",
 	oauthProviderAnthropic:         "Anthropic",
 	oauthProviderGoogleAntigravity: "Google Antigravity",
+	oauthProviderOllamaCloud:       "Ollama Cloud",
 }
 
 var (
@@ -771,6 +775,8 @@ func modelBelongsToProvider(provider, model string) bool {
 			lower == "google-antigravity" ||
 			strings.HasPrefix(lower, "antigravity/") ||
 			strings.HasPrefix(lower, "google-antigravity/")
+	case oauthProviderOllamaCloud:
+		return lower == "ollama-cloud" || strings.HasPrefix(lower, "ollama-cloud/")
 	default:
 		return false
 	}
@@ -794,6 +800,12 @@ func defaultModelConfigForProvider(provider, authMethod string) *config.ModelCon
 		return &config.ModelConfig{
 			ModelName:  "gemini-flash",
 			Model:      "antigravity/gemini-3-flash",
+			AuthMethod: authMethod,
+		}
+	case oauthProviderOllamaCloud:
+		return &config.ModelConfig{
+			ModelName:  "ollama-cloud-gpt",
+			Model:      "ollama-cloud/gpt-oss:120b-cloud",
 			AuthMethod: authMethod,
 		}
 	default:

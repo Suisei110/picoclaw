@@ -111,6 +111,9 @@
       },
       "antigravity": {
         "description": "Uses browser OAuth for Google Cloud Code Assist."
+      },
+      "ollama-cloud": {
+        "description": "Uses API key for Ollama Cloud models."
       }
     },
     "status": {
@@ -132,7 +135,8 @@
     },
     "fields": {
       "openaiToken": "OpenAI token",
-      "anthropicToken": "Anthropic token"
+      "anthropicToken": "Anthropic token",
+      "ollamaCloudToken": "Ollama Cloud API key"
     },
     "labels": {
       "account": "Account",

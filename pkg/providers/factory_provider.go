@@ -8,6 +8,7 @@ package providers
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -175,6 +176,28 @@ func CreateProviderFromConfig(cfg *config.ModelConfig) (LLMProvider, string, err
 			cfg.RequestTimeout,
 			cfg.ExtraBody,
 		), modelID, nil
+
+	case "ollama-cloud":
+		// Ollama Cloud provider using native Ollama API (not OpenAI-compatible)
+		// API key can be provided via:
+		// 1. Environment variable: OLLAMA_API_KEY
+		// 2. Auth store (via GUI/TUI credential management)
+		// 3. .security.yml (if configured)
+		apiKey := cfg.APIKey()
+		if apiKey == "" {
+			apiKey = os.Getenv("OLLAMA_API_KEY")
+		}
+		// Try loading from auth store if still empty
+		if apiKey == "" {
+			if cred, err := getCredential("ollama-cloud"); err == nil && cred != nil {
+				apiKey = cred.AccessToken
+			}
+		}
+		apiBase := cfg.APIBase
+		if apiBase == "" {
+			apiBase = getDefaultAPIBase(protocol)
+		}
+		return NewOllamaCloudProvider(apiKey, apiBase, cfg.Proxy), modelID, nil
 
 	case "minimax":
 		// Minimax requires reasoning_split: true in the request body
@@ -351,6 +374,8 @@ func getDefaultAPIBase(protocol string) string {
 		return "https://api-inference.modelscope.cn/v1"
 	case "mimo":
 		return "https://api.xiaomimimo.com/v1"
+	case "ollama-cloud":
+		return "https://ollama.com/api"
 	default:
 		return ""
 	}

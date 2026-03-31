@@ -18,6 +18,7 @@ function getProviderLabel(provider: OAuthProvider | ""): string {
   if (provider === "openai") return "OpenAI"
   if (provider === "anthropic") return "Anthropic"
   if (provider === "google-antigravity") return "Google Antigravity"
+  if (provider === "ollama-cloud") return "Ollama Cloud"
   return ""
 }
 
@@ -37,6 +38,7 @@ export function useCredentialsPage() {
 
   const [openAIToken, setOpenAIToken] = useState("")
   const [anthropicToken, setAnthropicToken] = useState("")
+  const [ollamaCloudToken, setOllamaCloudToken] = useState("")
 
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
   const [logoutConfirmProvider, setLogoutConfirmProvider] = useState<
@@ -169,6 +171,7 @@ export function useCredentialsPage() {
   const openaiStatus = providersMap.get("openai")
   const anthropicStatus = providersMap.get("anthropic")
   const antigravityStatus = providersMap.get("google-antigravity")
+  const ollamaCloudStatus = providersMap.get("ollama-cloud")
 
   const bumpActionToken = useCallback(() => {
     actionTokenRef.current += 1
@@ -414,9 +417,11 @@ export function useCredentialsPage() {
     flowHint,
     openAIToken,
     anthropicToken,
+    ollamaCloudToken,
     openaiStatus,
     anthropicStatus,
     antigravityStatus,
+    ollamaCloudStatus,
     logoutDialogOpen,
     logoutConfirmProvider,
     logoutProviderLabel,
@@ -424,6 +429,7 @@ export function useCredentialsPage() {
     deviceFlow,
     setOpenAIToken,
     setAnthropicToken,
+    setOllamaCloudToken,
     startBrowserOAuth,
     startOpenAIDeviceCode,
     stopLoading,

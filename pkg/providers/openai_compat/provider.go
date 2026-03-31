@@ -399,7 +399,7 @@ func normalizeModel(model, apiBase string) string {
 	prefix := strings.ToLower(before)
 	switch prefix {
 	case "litellm", "moonshot", "nvidia", "groq", "ollama", "deepseek", "google",
-		"openrouter", "zhipu", "mistral", "vivgrid", "minimax", "novita":
+		"openrouter", "zhipu", "mistral", "vivgrid", "minimax", "novita", "ollama-cloud":
 		return after
 	default:
 		return model

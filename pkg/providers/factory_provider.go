@@ -8,6 +8,7 @@ package providers
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -177,16 +178,20 @@ func CreateProviderFromConfig(cfg *config.ModelConfig) (LLMProvider, string, err
 		), modelID, nil
 
 	case "ollama-cloud":
-		// Ollama Cloud requires API key authentication
-		if cfg.APIKey() == "" {
-			return nil, "", fmt.Errorf("api_key is required for ollama-cloud protocol. Add your Ollama API key to .security.yml (see docs/security_configuration.md)")
+		// Ollama Cloud - API key can be provided via:
+		// 1. Environment variable: OLLAMA_API_KEY
+		// 2. Prompt at runtime (GUI/TUI)
+		// 3. .security.yml (if configured)
+		apiKey := cfg.APIKey()
+		if apiKey == "" {
+			apiKey = os.Getenv("OLLAMA_API_KEY")
 		}
 		apiBase := cfg.APIBase
 		if apiBase == "" {
 			apiBase = getDefaultAPIBase(protocol)
 		}
 		return NewHTTPProviderWithMaxTokensFieldAndRequestTimeout(
-			cfg.APIKey(),
+			apiKey,
 			apiBase,
 			cfg.Proxy,
 			cfg.MaxTokensField,

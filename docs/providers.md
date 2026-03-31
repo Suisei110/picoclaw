@@ -236,8 +236,17 @@ For direct Anthropic API access or custom endpoints that only support Anthropic'
 }
 ```
 
-Add your Ollama API key to `.security.yml`:
+**API Key Configuration (choose one):**
 
+**Option 1: Environment Variable (Recommended for security)**
+```bash
+export OLLAMA_API_KEY="your-ollama-api-key"
+```
+
+**Option 2: Via GUI/TUI Launcher**
+Configure the API key interactively through the PicoClaw Launcher interface without storing it in config files.
+
+**Option 3: .security.yml (if needed)**
 ```yaml
 model_list:
   ollama-cloud-gpt:

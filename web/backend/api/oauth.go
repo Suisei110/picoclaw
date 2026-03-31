@@ -531,7 +531,7 @@ func normalizeOAuthProvider(raw string) (string, error) {
 	switch provider {
 	case "antigravity":
 		return oauthProviderGoogleAntigravity, nil
-	case oauthProviderOpenAI, oauthProviderAnthropic, oauthProviderGoogleAntigravity:
+	case oauthProviderOpenAI, oauthProviderAnthropic, oauthProviderGoogleAntigravity, oauthProviderOllamaCloud:
 		return provider, nil
 	default:
 		return "", fmt.Errorf("unsupported provider %q", raw)

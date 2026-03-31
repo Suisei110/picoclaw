@@ -1,0 +1,7 @@
+FROM alpine:3.21
+RUN apk add --no-cache ca-certificates tzdata
+COPY --from=sipeed/picoclaw:launcher /usr/local/bin/picoclaw-launcher /usr/local/bin/picoclaw-launcher
+COPY picoclaw-main /usr/local/bin/picoclaw
+RUN chmod +x /usr/local/bin/picoclaw-launcher /usr/local/bin/picoclaw
+ENTRYPOINT ["picoclaw-launcher"]
+CMD ["-public", "-no-browser"]

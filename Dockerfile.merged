@@ -1,0 +1,13 @@
+# Custom PicoClaw with Ollama Cloud support
+# Uses official launcher (with frontend) + custom backend
+
+FROM sipeed/picoclaw:launcher
+
+USER root
+
+# Copy custom picoclaw binary with Ollama Cloud support
+COPY picoclaw-custom /usr/local/bin/picoclaw
+RUN chmod +x /usr/local/bin/picoclaw
+
+ENTRYPOINT ["picoclaw-launcher"]
+CMD ["-public", "-no-browser"]

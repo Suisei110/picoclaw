@@ -20,15 +20,7 @@ import (
 	"github.com/sipeed/picoclaw/pkg/providers/protocoltypes"
 )
 
-type (
-	ToolCall               = protocoltypes.ToolCall
-	FunctionCall           = protocoltypes.FunctionCall
-	LLMResponse            = protocoltypes.LLMResponse
-	UsageInfo              = protocoltypes.UsageInfo
-	Message                = protocoltypes.Message
-	ToolDefinition         = protocoltypes.ToolDefinition
-	ToolFunctionDefinition = protocoltypes.ToolFunctionDefinition
-)
+
 
 // OllamaCloudProvider implements LLMProvider for Ollama Cloud API
 // Uses native Ollama API format (not OpenAI-compatible)

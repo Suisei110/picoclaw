@@ -178,7 +178,7 @@ func CreateProviderFromConfig(cfg *config.ModelConfig) (LLMProvider, string, err
 		), modelID, nil
 
 	case "ollama-cloud":
-		// Ollama Cloud provider using native Ollama API (not OpenAI-compatible)
+		// Ollama Cloud uses OpenAI-compatible API with Bearer token auth
 		// API key can be provided via:
 		// 1. Environment variable: OLLAMA_API_KEY
 		// 2. Auth store (via GUI/TUI credential management)
@@ -197,7 +197,15 @@ func CreateProviderFromConfig(cfg *config.ModelConfig) (LLMProvider, string, err
 		if apiBase == "" {
 			apiBase = getDefaultAPIBase(protocol)
 		}
-		return NewOllamaCloudProvider(apiKey, apiBase, cfg.Proxy), modelID, nil
+		// Ollama Cloud requires API key for cloud models
+		return NewHTTPProviderWithMaxTokensFieldAndRequestTimeout(
+			apiKey,
+			apiBase,
+			cfg.Proxy,
+			cfg.MaxTokensField,
+			cfg.RequestTimeout,
+			cfg.ExtraBody,
+		), modelID, nil
 
 	case "minimax":
 		// Minimax requires reasoning_split: true in the request body
@@ -375,7 +383,7 @@ func getDefaultAPIBase(protocol string) string {
 	case "mimo":
 		return "https://api.xiaomimimo.com/v1"
 	case "ollama-cloud":
-		return "https://ollama.com/api"
+		return "https://ollama.com/v1"  // OpenAI-compatible endpoint
 	default:
 		return ""
 	}
